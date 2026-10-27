@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "预设",
+    "save": "保存",
+    "meter": "电平",
+    "cableReady": "音频线就绪",
+    "cableMissing": "无虚拟音频线",
     "tone": "音色",
     "title": "实时变声",
     "start": "开始",

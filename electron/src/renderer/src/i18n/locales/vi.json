@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Cài đặt sẵn",
+    "save": "Lưu",
+    "meter": "Mức",
+    "cableReady": "Cáp sẵn sàng",
+    "cableMissing": "Không có cáp ảo",
     "tone": "Âm sắc",
     "title": "Giọng trực tiếp",
     "start": "Bắt đầu",

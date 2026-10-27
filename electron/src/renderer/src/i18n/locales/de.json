@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Voreinstellungen",
+    "save": "Speichern",
+    "meter": "Pegel",
+    "cableReady": "Kabel bereit",
+    "cableMissing": "Kein virtuelles Kabel",
     "tone": "Klangfarbe",
     "title": "Live-Stimme",
     "start": "Start",

@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Presets",
+    "save": "Save",
+    "meter": "Level",
+    "cableReady": "Cable ready",
+    "cableMissing": "No virtual cable",
     "tone": "Tone",
     "title": "Live voice",
     "start": "Start",

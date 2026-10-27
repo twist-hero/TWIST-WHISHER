@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Preset",
+    "save": "Simpan",
+    "meter": "Level",
+    "cableReady": "Kabel siap",
+    "cableMissing": "Tidak ada kabel virtual",
     "tone": "Nada",
     "title": "Suara langsung",
     "start": "Mulai",

@@ -4199,6 +4199,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Predefinições",
+    "save": "Salvar",
+    "meter": "Nível",
+    "cableReady": "Cabo pronto",
+    "cableMissing": "Sem cabo virtual",
     "tone": "Timbre",
     "title": "Voz ao vivo",
     "start": "Iniciar",

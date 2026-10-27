@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "พรีเซ็ต",
+    "save": "บันทึก",
+    "meter": "ระดับ",
+    "cableReady": "สายพร้อม",
+    "cableMissing": "ไม่มีสายเสมือน",
     "tone": "โทนเสียง",
     "title": "เสียงสด",
     "start": "เริ่ม",

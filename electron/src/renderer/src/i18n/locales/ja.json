@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "プリセット",
+    "save": "保存",
+    "meter": "レベル",
+    "cableReady": "ケーブル準備完了",
+    "cableMissing": "仮想ケーブルなし",
     "tone": "音色",
     "title": "ライブボイス",
     "start": "開始",

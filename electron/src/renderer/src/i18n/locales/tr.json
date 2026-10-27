@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Hazır ayarlar",
+    "save": "Kaydet",
+    "meter": "Seviye",
+    "cableReady": "Kablo hazır",
+    "cableMissing": "Sanal kablo yok",
     "tone": "Tını",
     "title": "Canlı ses",
     "start": "Başlat",

@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Förval",
+    "save": "Spara",
+    "meter": "Nivå",
+    "cableReady": "Kabel klar",
+    "cableMissing": "Ingen virtuell kabel",
     "tone": "Klang",
     "title": "Live-röst",
     "start": "Starta",

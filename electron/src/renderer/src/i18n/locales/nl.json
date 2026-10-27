@@ -4197,6 +4197,11 @@
   }
 ,
   "liveVoice": {
+    "presets": "Presets",
+    "save": "Opslaan",
+    "meter": "Niveau",
+    "cableReady": "Kabel gereed",
+    "cableMissing": "Geen virtuele kabel",
     "tone": "Toon",
     "title": "Live-stem",
     "start": "Start",
