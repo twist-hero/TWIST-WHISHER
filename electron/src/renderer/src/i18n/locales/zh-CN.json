@@ -310,6 +310,13 @@
     "open": "打开"
   },
   "themeAppearance": {
+    "custom": "自定义",
+    "canvas": "画布",
+    "surface": "表面",
+    "text": "文本",
+    "accent": "强调色",
+    "radius": "圆角半径",
+    "reset": "重置",
     "light": "浅色",
     "dark": "深色",
     "system": "系统",

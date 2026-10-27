@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "Hệ thống"
   },
   "themeAppearance": {
+    "custom": "Tùy chỉnh",
+    "canvas": "Khung vẽ",
+    "surface": "Bề mặt",
+    "text": "Văn bản",
+    "accent": "Màu nhấn",
+    "radius": "Bán kính góc",
+    "reset": "Đặt lại",
     "light": "Sáng",
     "dark": "Tối",
     "system": "Hệ thống",

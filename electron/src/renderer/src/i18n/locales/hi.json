@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "सिस्टम"
   },
   "themeAppearance": {
+    "custom": "कस्टम",
+    "canvas": "कैनवास",
+    "surface": "सतह",
+    "text": "टेक्स्ट",
+    "accent": "एक्सेंट",
+    "radius": "कोना त्रिज्या",
+    "reset": "रीसेट",
     "light": "हल्का",
     "dark": "गहरा",
     "system": "सिस्टम",

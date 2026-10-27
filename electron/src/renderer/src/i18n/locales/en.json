@@ -678,6 +678,13 @@
     "open": "Open"
   },
   "themeAppearance": {
+    "custom": "Custom",
+    "canvas": "Canvas",
+    "surface": "Surface",
+    "text": "Text",
+    "accent": "Accent",
+    "radius": "Corner radius",
+    "reset": "Reset",
     "light": "Light",
     "dark": "Dark",
     "system": "System",

@@ -310,6 +310,13 @@
     "open": "열기"
   },
   "themeAppearance": {
+    "custom": "사용자 지정",
+    "canvas": "캔버스",
+    "surface": "표면",
+    "text": "텍스트",
+    "accent": "강조 색",
+    "radius": "모서리 반경",
+    "reset": "초기화",
     "light": "밝게",
     "dark": "다크",
     "system": "시스템",

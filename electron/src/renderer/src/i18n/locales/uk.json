@@ -314,6 +314,13 @@
     "audio_tools_origin_system": "Системна"
   },
   "themeAppearance": {
+    "custom": "Власна",
+    "canvas": "Полотно",
+    "surface": "Поверхня",
+    "text": "Текст",
+    "accent": "Акцент",
+    "radius": "Радіус кутів",
+    "reset": "Скинути",
     "light": "Світла",
     "dark": "Темна",
     "system": "Системна",

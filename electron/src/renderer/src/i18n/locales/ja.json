@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "システム"
   },
   "themeAppearance": {
+    "custom": "カスタム",
+    "canvas": "キャンバス",
+    "surface": "サーフェス",
+    "text": "テキスト",
+    "accent": "アクセント",
+    "radius": "角の半径",
+    "reset": "リセット",
     "light": "ライト",
     "dark": "ダーク",
     "system": "システム",

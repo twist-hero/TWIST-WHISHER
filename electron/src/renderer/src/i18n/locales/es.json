@@ -312,6 +312,13 @@
     "audio_tools_origin_system": "Sistema"
   },
   "themeAppearance": {
+    "custom": "Personalizado",
+    "canvas": "Lienzo",
+    "surface": "Superficie",
+    "text": "Texto",
+    "accent": "Acento",
+    "radius": "Radio de esquina",
+    "reset": "Restablecer",
     "light": "Claro",
     "dark": "Oscuro",
     "system": "Sistema",

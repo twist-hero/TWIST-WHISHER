@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "System"
   },
   "themeAppearance": {
+    "custom": "Eigene",
+    "canvas": "Leinwand",
+    "surface": "Oberfläche",
+    "text": "Text",
+    "accent": "Akzent",
+    "radius": "Eckenradius",
+    "reset": "Zurücksetzen",
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System",

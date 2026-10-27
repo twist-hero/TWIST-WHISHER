@@ -1,7 +1,8 @@
 import { BUILT_IN_THEMES, getThemeColorsForAppearance, type ThemeAppearance } from './t3-palettes';
 import { TAURI_THEME } from './tauri-palette';
+import { CUSTOM_THEME_ID, customColors, loadCustomTheme } from './custom-theme';
 export const AVAILABLE_PALETTES = [...BUILT_IN_THEMES, TAURI_THEME];
-export type PaletteId = 'default' | (typeof BUILT_IN_THEMES)[number]['id'];
+export type PaletteId = 'default' | (typeof BUILT_IN_THEMES)[number]['id'] | typeof CUSTOM_THEME_ID;
 export type ThemeMode = ThemeAppearance | 'system';
 export interface ThemePreferences {
   mode: ThemeMode;
@@ -31,7 +32,9 @@ export function parseThemePreferences(
   const palette = (value: unknown) => {
     const id = typeof value === 'string' ? (aliases[value] ?? value) : value;
     return typeof id === 'string' &&
-      (id === 'default' || AVAILABLE_PALETTES.some((theme) => theme.id === id))
+      (id === 'default' ||
+        id === CUSTOM_THEME_ID ||
+        AVAILABLE_PALETTES.some((theme) => theme.id === id))
       ? id
       : 'default';
   };
@@ -51,6 +54,9 @@ export function resolveTheme(preferences: ThemePreferences, systemDark: boolean)
   return { appearance, paletteId: preferences[appearance] };
 }
 export function paletteColors(id: string, appearance: ThemeAppearance) {
+  // The user's own palette is read at apply time, so editing a seed restyles
+  // the app without the stored preference having to change.
+  if (id === CUSTOM_THEME_ID) return customColors(loadCustomTheme(), appearance);
   const theme = AVAILABLE_PALETTES.find((item) => item.id === id);
   return theme ? getThemeColorsForAppearance(theme, appearance) : null;
 }

@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "Sistem"
   },
   "themeAppearance": {
+    "custom": "Özel",
+    "canvas": "Tuval",
+    "surface": "Yüzey",
+    "text": "Metin",
+    "accent": "Vurgu",
+    "radius": "Köşe yarıçapı",
+    "reset": "Sıfırla",
     "light": "Işık",
     "dark": "Koyu",
     "system": "Sistem",

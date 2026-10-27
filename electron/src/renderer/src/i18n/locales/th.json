@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "ระบบ"
   },
   "themeAppearance": {
+    "custom": "กำหนดเอง",
+    "canvas": "ผืนผ้าใบ",
+    "surface": "พื้นผิว",
+    "text": "ข้อความ",
+    "accent": "สีเน้น",
+    "radius": "รัศมีมุม",
+    "reset": "รีเซ็ต",
     "light": "สว่าง",
     "dark": "มืด",
     "system": "ระบบ",

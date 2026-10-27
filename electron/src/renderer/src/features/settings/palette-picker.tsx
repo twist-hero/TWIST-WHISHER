@@ -1,14 +1,50 @@
+import { useState } from 'react';
 import { CheckIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/use-theme';
 import { type ThemeAppearance } from '@/lib/themes/t3-palettes';
 import { AVAILABLE_PALETTES, paletteColors } from '@/lib/themes/theme-preferences';
+import {
+  CUSTOM_THEME_ID,
+  DEFAULT_CUSTOM_THEME,
+  loadCustomTheme,
+  saveCustomTheme,
+  type CustomSeeds,
+} from '@/lib/themes/custom-theme';
 import { cn } from '@/lib/utils';
+
+const SEED_FIELDS: Array<{ key: keyof CustomSeeds; label: string }> = [
+  { key: 'canvas', label: 'themeAppearance.canvas' },
+  { key: 'surface', label: 'themeAppearance.surface' },
+  { key: 'text', label: 'themeAppearance.text' },
+  { key: 'accent', label: 'themeAppearance.accent' },
+];
 
 export function PalettePicker({ appearance }: { appearance: ThemeAppearance }) {
   const { t } = useTranslation();
   const settings = useTheme();
-  const options = [{ id: 'default', label: t('themeAppearance.default') }, ...AVAILABLE_PALETTES];
+  const [custom, setCustom] = useState(loadCustomTheme);
+  const options = [
+    { id: 'default', label: t('themeAppearance.default') },
+    { id: CUSTOM_THEME_ID, label: t('themeAppearance.custom') },
+    ...AVAILABLE_PALETTES,
+  ];
+
+  const editSeed = (key: keyof CustomSeeds, value: string) => {
+    const next = { ...custom, [appearance]: { ...custom[appearance], [key]: value } };
+    setCustom(next);
+    saveCustomTheme(next);
+    // Editing a seed means this is the palette you want to see.
+    settings.updateTheme({ [appearance]: CUSTOM_THEME_ID, mode: appearance });
+  };
+
+  const editRadius = (radius: number) => {
+    const next = { ...custom, radius };
+    setCustom(next);
+    saveCustomTheme(next);
+    settings.updateTheme({ [appearance]: CUSTOM_THEME_ID, mode: appearance });
+  };
+
   return (
     <section className="p-4">
       <h3 id={`palette-${appearance}`} className="mb-3 text-sm font-medium">
@@ -62,6 +98,56 @@ export function PalettePicker({ appearance }: { appearance: ThemeAppearance }) {
             </button>
           );
         })}
+      </div>
+
+      <div className="mt-4 rounded-md border border-border bg-card/25">
+        <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/25 px-4 py-2">
+          <span className="text-xs font-medium">{t('themeAppearance.custom')}</span>
+          <button
+            type="button"
+            className="font-mono text-[length:var(--text-caption)] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+            onClick={() => {
+              const next = DEFAULT_CUSTOM_THEME;
+              setCustom(next);
+              saveCustomTheme(next);
+              settings.updateTheme({ [appearance]: CUSTOM_THEME_ID, mode: appearance });
+            }}
+          >
+            {t('themeAppearance.reset')}
+          </button>
+        </div>
+        <div className="grid gap-3 px-4 py-3 sm:grid-cols-2">
+          {SEED_FIELDS.map((field) => (
+            <label key={field.key} className="flex items-center justify-between gap-3 text-xs">
+              <span className="text-muted-foreground">{t(field.label)}</span>
+              <input
+                type="color"
+                value={custom[appearance][field.key]}
+                aria-label={t(field.label)}
+                onChange={(event) => editSeed(field.key, event.target.value)}
+                className="h-7 w-12 cursor-pointer rounded border border-border bg-transparent p-0.5"
+              />
+            </label>
+          ))}
+        </div>
+        <div className="flex items-center justify-between gap-3 border-t border-border px-4 py-2">
+          <span className="text-xs text-muted-foreground">{t('themeAppearance.radius')}</span>
+          <span className="font-mono text-[length:var(--text-caption)] tabular-nums">
+            {custom.radius.toFixed(2)} rem
+          </span>
+        </div>
+        <div className="px-4 pb-3">
+          <input
+            type="range"
+            min={0}
+            max={1.2}
+            step={0.05}
+            value={custom.radius}
+            aria-label={t('themeAppearance.radius')}
+            onChange={(event) => editRadius(Number(event.target.value))}
+            className="w-full accent-[var(--primary)]"
+          />
+        </div>
       </div>
     </section>
   );

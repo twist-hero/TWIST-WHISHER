@@ -318,6 +318,13 @@
     "audio_tools_origin_system": "النظام"
   },
   "themeAppearance": {
+    "custom": "مخصص",
+    "canvas": "اللوحة",
+    "surface": "السطح",
+    "text": "النص",
+    "accent": "لون التمييز",
+    "radius": "انحناء الحواف",
+    "reset": "إعادة تعيين",
     "light": "فاتح",
     "dark": "داكن",
     "system": "النظام",

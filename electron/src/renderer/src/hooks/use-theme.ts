@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { THEME_COLOR_ROLES } from '@/lib/themes/t3-palettes';
+import { CUSTOM_THEME_ID, loadCustomTheme } from '@/lib/themes/custom-theme';
 import {
   colorVariable,
   paletteColors,
@@ -43,6 +44,12 @@ function apply() {
   } else {
     delete root.dataset.themeId;
     for (const role of THEME_COLOR_ROLES) root.style.removeProperty(colorVariable(role));
+  }
+  // The custom palette also owns corner radius; built-ins keep the base value.
+  if (current.paletteId === CUSTOM_THEME_ID) {
+    root.style.setProperty('--radius', `${loadCustomTheme().radius}rem`);
+  } else {
+    root.style.removeProperty('--radius');
   }
 }
 function refresh() {

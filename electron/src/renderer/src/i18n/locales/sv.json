@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "System"
   },
   "themeAppearance": {
+    "custom": "Egen",
+    "canvas": "Duk",
+    "surface": "Yta",
+    "text": "Text",
+    "accent": "Accent",
+    "radius": "Hörnradie",
+    "reset": "Återställ",
     "light": "Ljust",
     "dark": "Mörk",
     "system": "System",

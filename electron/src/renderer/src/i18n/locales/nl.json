@@ -310,6 +310,13 @@
     "audio_tools_origin_system": "Systeem"
   },
   "themeAppearance": {
+    "custom": "Aangepast",
+    "canvas": "Canvas",
+    "surface": "Oppervlak",
+    "text": "Tekst",
+    "accent": "Accent",
+    "radius": "Hoekradius",
+    "reset": "Herstellen",
     "light": "Licht",
     "dark": "Donker",
     "system": "Systeem",
