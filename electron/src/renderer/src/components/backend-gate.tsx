@@ -275,7 +275,7 @@ export function BackendGate({ children, repairDock }: BackendGateProps) {
               !
             </div>
           ) : (
-            <BootWordmark label={t('app.name')} />
+            <BootWordmark label={t('app.name')} elapsedSeconds={seconds} />
           )}
           {!setup && !installing && (failed || running) ? (
             <BackendStatusPill state={pillState} seconds={seconds} repeats={repeats} />
