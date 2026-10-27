@@ -3,6 +3,7 @@ import { isMac } from '@/components/bridge';
 import { cn } from '@/lib/utils';
 import { AccountMenu } from './account-menu';
 import { SystemNotifications } from './system-notifications';
+import { UpdateButton } from './update-button';
 
 const SPACE_VAR = '--corner-space';
 /** Clear space kept between a page's own title bar buttons and the corner. */
@@ -49,6 +50,7 @@ export function AccountCorner({ notificationsEnabled }: { notificationsEnabled: 
         isMac() ? 'right-3.5' : 'right-[148px]',
       )}
     >
+      <UpdateButton />
       <AccountMenu />
       <SystemNotifications enabled={notificationsEnabled} titlebar />
     </div>

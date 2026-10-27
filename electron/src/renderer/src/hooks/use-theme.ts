@@ -17,12 +17,25 @@ const media =
   typeof window.matchMedia === 'function'
     ? window.matchMedia('(prefers-color-scheme: dark)')
     : null;
+/**
+ * A rebrand ships new default tokens, but a saved palette id overrides every
+ * one of them — which is why an upgraded build can look untouched. This runs
+ * once per profile: it moves a pre-rebrand palette onto the new default and
+ * records that it did, so a later choice is never overridden again.
+ */
+const REBRAND_MIGRATION_KEY = 'voicestudio.theme.rebrand-v3';
+
 function readStored() {
   try {
-    return parseThemePreferences(
+    const stored = parseThemePreferences(
       localStorage.getItem(THEME_STORAGE_KEY),
       localStorage.getItem('voicestudio.theme'),
     );
+    if (localStorage.getItem(REBRAND_MIGRATION_KEY)) return stored;
+    const migrated = { ...stored, light: 'default' as const, dark: 'default' as const };
+    localStorage.setItem(REBRAND_MIGRATION_KEY, '1');
+    localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(migrated));
+    return migrated;
   } catch {
     return parseThemePreferences(null);
   }
