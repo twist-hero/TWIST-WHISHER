@@ -35,7 +35,7 @@ if (
 ) {
   throw new Error(`Unsupported Electron update channel: ${updateChannel}`);
 }
-const updateUrl = 'https://github.com/debpalash/VoiceStudio/releases/latest/download';
+const updateUrl = 'https://github.com/twist-hero/TWIST-WHISHER/releases/latest/download';
 
 export function distributionPackaging(target = DISTRIBUTION_TARGET) {
   if (target === 'snap-store') {
