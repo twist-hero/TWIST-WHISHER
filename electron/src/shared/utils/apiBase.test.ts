@@ -3,11 +3,12 @@
  *
  * Covers the four-branch resolver:
  *   1. VITE_OMNIVOICE_API override always wins.
- *   2. Tauri webview context → 127.0.0.1:3900 (IPv4; not "localhost" — Windows IPv6).
- *   3. Plain browser context → window.location.hostname:3900.
- *   4. SSR / no-window fallback → localhost:3900.
+ *   2. Tauri webview context → 127.0.0.1:<default port> (IPv4; not "localhost" — Windows IPv6).
+ *   3. Plain browser context → window.location.hostname:<default port>.
+ *   4. SSR / no-window fallback → localhost:<default port>.
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { DEFAULT_BACKEND_PORT } from '../app-config.ts';
 
 describe('apiBase.getApiBase', () => {
   // Snapshot what we mutate so each test starts clean.
@@ -75,16 +76,16 @@ describe('apiBase.getApiBase', () => {
     mod._setEnvOverrideForTesting(undefined);
   });
 
-  it('returns 127.0.0.1:3900 (NOT localhost) in Tauri context — Windows IPv6 fix', async () => {
+  it(`returns 127.0.0.1:${DEFAULT_BACKEND_PORT} (NOT localhost) in Tauri context — Windows IPv6 fix`, async () => {
     // The backend binds IPv4 127.0.0.1 only; "localhost" can resolve to ::1 on
     // Windows and miss it, causing "Can't reach the local backend" on the media/
     // preview path. Must be the numeric IPv4 address (matches api/client.ts).
     (window as Window).__TAURI_INTERNALS__ = {};
     const { getApiBase } = await import('./apiBase');
-    expect(getApiBase()).toBe('http://127.0.0.1:3900');
+    expect(getApiBase()).toBe(`http://127.0.0.1:${DEFAULT_BACKEND_PORT}`);
   });
 
-  it('returns window.location.hostname:3900 in plain browser context (LAN IP)', async () => {
+  it(`returns window.location.hostname:${DEFAULT_BACKEND_PORT} in plain browser context (LAN IP)`, async () => {
     delete (window as Window).__TAURI_INTERNALS__;
     delete (window as Window).__TAURI__;
     Object.defineProperty(window, 'location', {
@@ -97,7 +98,7 @@ describe('apiBase.getApiBase', () => {
       },
     });
     const { getApiBase } = await import('./apiBase');
-    expect(getApiBase()).toBe('http://192.168.1.50:3900');
+    expect(getApiBase()).toBe(`http://192.168.1.50:${DEFAULT_BACKEND_PORT}`);
   });
 
   it('respects page protocol (https) when serving over LAN TLS', async () => {
@@ -113,11 +114,11 @@ describe('apiBase.getApiBase', () => {
       },
     });
     const { getApiBase } = await import('./apiBase');
-    expect(getApiBase()).toBe('https://studio.local:3900');
+    expect(getApiBase()).toBe(`https://studio.local:${DEFAULT_BACKEND_PORT}`);
   });
 
-  it('BACKEND_PORT constant is exported and equals 3900', async () => {
+  it('BACKEND_PORT constant is exported and equals the configured default port', async () => {
     const { BACKEND_PORT } = await import('./apiBase');
-    expect(BACKEND_PORT).toBe(3900);
+    expect(BACKEND_PORT).toBe(DEFAULT_BACKEND_PORT);
   });
 });

@@ -15,6 +15,14 @@ function requiredPort(value, key) {
 }
 
 export const PRODUCT_NAME = requiredString(rawConfig.productName, "productName");
+
+// Installer artifacts must stay shell- and URL-safe, so artifact names use a
+// hyphenated form of the product name ("TWIST WHISPER" -> "TWIST-WHISPER").
+// electron-builder and the packaging contract share this one rule so the
+// contract can pin the exact artifact template.
+export function artifactProductPrefix(name = PRODUCT_NAME) {
+  return name.replace(/[^A-Za-z0-9]+/g, "-");
+}
 export const APP_ID = requiredString(rawConfig.appId, "appId");
 export const DEFAULT_BACKEND_PORT = requiredPort(rawConfig.ports?.backend, "backend");
 export const DEFAULT_WEB_PORT = requiredPort(rawConfig.ports?.web, "web");

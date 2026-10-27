@@ -139,9 +139,9 @@ export function ScriptPanel({
   }, [insertOpen]);
 
   return (
-    <section className="flex min-h-64 flex-1 flex-col">
+    <section className="flex min-h-64 flex-1 flex-col overflow-hidden rounded-md border border-border bg-card/25">
       <div className="flex min-h-0 flex-1 flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/25 px-4 py-2">
           <SectionLabel>
             <AlignLeftIcon aria-hidden="true" />
             {t('clone.text_label')}
@@ -347,7 +347,7 @@ export function ScriptPanel({
               : t('clone.prompt_placeholder')
           }
           aria-label={t('clone.text_label')}
-          className="min-h-32 flex-1 resize-none rounded-none border-0 bg-transparent px-0 py-3 leading-[var(--text-editor--line-height)] text-[length:var(--text-editor)] shadow-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 md:text-[length:var(--text-editor)] md:leading-[var(--text-editor--line-height)] dark:bg-transparent"
+          className="min-h-32 max-w-[72ch] flex-1 resize-none rounded-none border-0 bg-transparent px-4 py-4 leading-[1.9] text-[length:var(--text-editor)] shadow-none ring-0 placeholder:text-muted-foreground focus-visible:ring-0 md:text-[length:var(--text-editor)] md:leading-[1.9] dark:bg-transparent"
           onKeyDown={(event) => {
             if (event.altKey && event.key === '/') {
               event.preventDefault();
@@ -356,8 +356,8 @@ export function ScriptPanel({
           }}
           spellCheck
         />
-        <div className="flex justify-end">
-          <span className="text-[length:var(--text-label)] text-muted-foreground tabular-nums">
+        <div className="flex justify-end border-t border-border px-4 py-1.5">
+          <span className="font-mono text-[length:var(--text-caption)] text-muted-foreground tabular-nums">
             {t('clone.characters', { count: text.length })}
           </span>
         </div>

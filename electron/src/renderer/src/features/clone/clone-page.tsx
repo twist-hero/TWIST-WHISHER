@@ -203,7 +203,7 @@ export function ClonePage() {
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-3 border-b border-border pb-3">
                   <Button
                     variant="ghost"
                     disabled={isGenerating}
@@ -219,8 +219,8 @@ export function ClonePage() {
                       name={selectedVoice?.name ?? ''}
                       imageUrl={selectedVoice?.image_url}
                     />
-                    <span className="shrink-0 font-normal text-muted-foreground">
-                      {t('clone.voice_kicker')} <span aria-hidden="true">·</span>
+                    <span className="shrink-0 font-mono text-[length:var(--text-caption)] text-muted-foreground">
+                      {t('clone.voice_kicker')}
                     </span>
                     <span className="max-w-60 truncate font-semibold">
                       {selectedVoice?.name ?? t('cloneFlow.voice_sample')}
@@ -253,7 +253,7 @@ export function ClonePage() {
           {((!choosingVoice && !savingUpload) || isGenerating) && (
             <SynthesisDock output={<OutputPanel />}>
               <div className="mx-auto w-full max-w-4xl px-6 pb-4">
-                <div className="glass-panel composer-surface rounded-xl border border-border/60 bg-muted/30 p-2.5 shadow-[0_2px_12px_rgb(0_0_0/4%)]">
+                <div className="composer-surface border-t border-border bg-background pt-3">
                   <ActionBar />
                 </div>
               </div>

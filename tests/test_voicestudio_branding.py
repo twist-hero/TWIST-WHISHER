@@ -1,4 +1,4 @@
-"""VoiceStudio release-brand and source-launch contracts."""
+"""TWIST WHISPER release-brand and source-launch contracts."""
 
 from __future__ import annotations
 
@@ -34,10 +34,10 @@ def test_current_version_is_in_lockstep_everywhere() -> None:
         assert match and Version(match.group(1)) == Version(CURRENT_VERSION), path
 
 
-def test_visible_brand_surfaces_say_voicestudio() -> None:
+def test_visible_brand_surfaces_name_twist_whisper() -> None:
     visible_files = ("electron/build/Info.plist", "electron/src/renderer/index.html")
     product_name = json.loads((ROOT / "config/app.json").read_text())["productName"]
-    assert product_name == "VoiceStudio"
+    assert product_name == "TWIST WHISPER"
     for path in visible_files:
         text = (ROOT / path).read_text()
         assert "__APP_PRODUCT_NAME__" in text, path
@@ -46,7 +46,7 @@ def test_visible_brand_surfaces_say_voicestudio() -> None:
         assert "OmniVoice Gallery" not in text, path
 
     readme = (ROOT / "README.md").read_text()
-    assert "**VoiceStudio** (default, powered by k2-fsa/OmniVoice)" in readme
+    assert "**TWIST WHISPER** (default, powered by k2-fsa/OmniVoice)" in readme
     assert "**OmniVoice** (default)" not in readme
 
 
@@ -57,7 +57,7 @@ def test_brand_mark_is_shared_and_fills_the_icon() -> None:
     logo = (ROOT / "docs/logo.svg").read_text()
     favicon = (ROOT / "electron/public/favicon.svg").read_text()
 
-    signature = "M6 34c4 0 5-7 9-7"
+    signature = "M17.1 29.5V34.5"
     assert signature in mark
     assert signature in logo
     assert signature in favicon
@@ -75,7 +75,7 @@ def test_brand_mark_is_shared_and_fills_the_icon() -> None:
 def test_waveform_stroke_is_never_filled() -> None:
     # An SVG path fills black unless told otherwise; without fill="none" the
     # waveform's closed curves painted a black band across every icon.
-    signature = "M6 34c4 0 5-7 9-7"
+    signature = "M17.1 29.5V34.5"
     tracked = subprocess.run(["git", "ls-files", "*.svg"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
     svgs = [ROOT / name for name in tracked if signature in (ROOT / name).read_text()]
     assert len(svgs) >= 3
@@ -103,7 +103,7 @@ def test_android_vectors_keep_unpainted_waveform_transparent(tmp_path: Path, nam
     generator["generate"](ROOT, tmp_path)
     android = "{http://schemas.android.com/apk/res/android}"
     vector = ET.parse(tmp_path / f"drawable/{name}.xml").getroot()
-    waveform = next(p for p in vector.iter("path") if p.get(android + "pathData", "").startswith("M6 34c4 0 5-7 9-7"))
+    waveform = next(p for p in vector.iter("path") if p.get(android + "pathData", "").startswith("M17.1 29.5V34.5"))
     # SVG's `none` is not an Android color; monochrome must preserve unpainted areas too.
     assert waveform.get(android + "fillColor") in (None, "#00000000", "@android:color/transparent")
     assert waveform.get(android + "strokeColor") or any(
@@ -147,10 +147,10 @@ def test_engine_help_names_the_app_not_the_upstream_model() -> None:
 
 def test_compatibility_identifiers_stay_stable() -> None:
     package = json.loads((ROOT / "package.json").read_text())
-    assert package["name"] == "omnivoice-studio-monorepo"
+    assert package["name"] == "twist-whisper-monorepo"
     assert 'name = "omnivoice"' in (ROOT / "pyproject.toml").read_text()
     app_config = json.loads((ROOT / "config/app.json").read_text())
-    assert app_config["appId"] == "com.voicestudio.desktop"
+    assert app_config["appId"] == "com.twistwhisper.desktop"
 
 
 def test_active_source_launch_is_electron_and_web_ports_clean_quietly() -> None:

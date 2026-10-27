@@ -343,7 +343,9 @@
 }
 
 .home-destination {
-  --home-accent: #79b9ee;
+  /* One accent system: the brand red washes every primary card instead of a
+     pastel hue per destination. */
+  --home-accent: var(--primary);
   position: relative;
   isolation: isolate;
   min-width: 0;
@@ -357,12 +359,6 @@
     box-shadow 180ms ease;
 }
 
-.home-destination[data-destination='/design'] {
-  --home-accent: #b8a1ee;
-}
-.home-destination[data-destination='/dub'] {
-  --home-accent: #72cebd;
-}
 
 .home-destination--primary {
   display: flex;

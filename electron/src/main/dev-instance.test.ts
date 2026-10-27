@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  DEFAULT_ELECTRON_DEV_PORT,
+  DEFAULT_ELECTRON_PROXY_PORT,
+} from '../../../config/app-config.mjs';
+import {
   devElectronPids,
   devInstancePorts,
   replacePreviousDevInstance,
@@ -10,12 +14,17 @@ import {
 
 describe('bun dev replaces an earlier dev instance', () => {
   it('clears only the dev proxy and renderer ports, never the backend port', () => {
-    expect(devInstancePorts({})).toEqual([3903, 3902]);
+    expect(devInstancePorts({})).toEqual([
+      DEFAULT_ELECTRON_PROXY_PORT,
+      DEFAULT_ELECTRON_DEV_PORT,
+    ]);
     expect(
       devInstancePorts({ VOICESTUDIO_UI_PORT: '4100', VOICESTUDIO_ELECTRON_PROXY_PORT: '4200' }),
     ).toEqual([4200, 4100]);
     // An OS-assigned proxy port has nothing fixed to free.
-    expect(devInstancePorts({ VOICESTUDIO_ELECTRON_PROXY_PORT: '0' })).toEqual([3902]);
+    expect(devInstancePorts({ VOICESTUDIO_ELECTRON_PROXY_PORT: '0' })).toEqual([
+      DEFAULT_ELECTRON_DEV_PORT,
+    ]);
   });
 
   it('asks a Windows dev app to close its windows before any forced stop', () => {
@@ -62,13 +71,16 @@ describe('bun dev replaces an earlier dev instance', () => {
   });
 
   it('asks a leftover dev app to quit and forces it only if it is still there', async () => {
+    // devElectronPids matches the platform's path style: backslashes on Windows.
+    const devCommand =
+      process.platform === 'win32' ? '\\dev\\Electron .' : '/dev/Electron .';
     let running = [7];
     const kill = vi.fn((pid: number, signal: string) => {
       if (signal === 'SIGKILL') running = running.filter((p) => p !== pid);
     });
     await stopLeftoverDevApps({
       location: '/dev/',
-      list: () => running.map((pid) => `${pid} /dev/Electron .`).join('\n'),
+      list: () => running.map((pid) => `${pid} ${devCommand}`).join('\n'),
       kill,
       sleep: async () => {},
       timeoutMs: 1000,
@@ -82,7 +94,7 @@ describe('bun dev replaces an earlier dev instance', () => {
     running = [8];
     await stopLeftoverDevApps({
       location: '/dev/',
-      list: () => running.map((pid) => `${pid} /dev/Electron .`).join('\n'),
+      list: () => running.map((pid) => `${pid} ${devCommand}`).join('\n'),
       kill: (pid: number, signal: string) => {
         kill(pid, signal);
         running = [];

@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="../../docs/logo.png" alt="VoiceStudio" width="88" />
-  <h1>VoiceStudio</h1>
+  <img src="../../docs/logo.png" alt="TWIST WHISPER" width="88" />
+  <h1>TWIST WHISPER</h1>
   <p>
-    <a href="https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/28176" alt="Trendshift における VoiceStudio のランキング" width="220" height="48" /></a>
+    <a href="https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/28176" alt="Trendshift における TWIST WHISPER のランキング" width="220" height="48" /></a>
   </p>
   <p><strong>646 言語に対応した、オープンソースの音声クローン・ボイスデザイン・動画吹き替え・音声入力・文字起こし・オーディオブック制作ツール。</strong></p>
   <p>
@@ -31,7 +31,7 @@
 | 声をクローン、または独自にデザイン | タイミングを合わせた音声で動画を吹き替え | エージェント向けのローカル API と MCP |
 | フローティングウィジェットで音声入力 | ストーリー、オーディオブック、バッチ処理 | オプションのリモートワーカー |
 
-まずは **VoiceStudio**（デフォルト、k2-fsa/OmniVoice を使用）から始めるか、別のエンジンを選択してください。[機能とエンジンの一覧](../../docs/feature-catalog.md)。
+まずは **TWIST WHISPER**（デフォルト、k2-fsa/OmniVoice を使用）から始めるか、別のエンジンを選択してください。[機能とエンジンの一覧](../../docs/feature-catalog.md)。
 
 ローカルのワークフローはお使いのハードウェア上で動作します。リモートサービスは任意で、利用状況の分析には同意が必要です。
 
@@ -51,7 +51,7 @@
   <tr><td align="center">ボイスデザイン</td><td align="center">ローカルモデル</td></tr>
 </table>
 
-<img width="2628" height="1950" alt="VoiceStudio デスクトップワークスペース" src="https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659" />
+<img width="2628" height="1950" alt="TWIST WHISPER デスクトップワークスペース" src="https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659" />
 
 </details>
 
@@ -90,7 +90,7 @@ Electron パッケージを含んでいる必要があり、アーカイブ済�
 コーディングエージェント（Claude Code、Codex、Cursor など）に貼り付けてください：
 
 ```text
-Install the VoiceStudio Electron app on this device and verify it works, following
+Install the TWIST WHISPER Electron app on this device and verify it works, following
 https://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md
 ```
 

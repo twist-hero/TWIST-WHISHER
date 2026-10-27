@@ -1,4 +1,4 @@
-# VoiceStudio — Electron desktop app
+# TWIST WHISPER — Electron desktop app
 
 Electron is the only maintained desktop app for voice cloning, stories, dubbing,
 transcription, voice design, and workflows. Tauri is archived at v0.5.3. For
@@ -139,7 +139,7 @@ Layout references: T3 Code's `AppSidebarLayout`, `PreviewPanelShell`,
 The sidebar extends through the native title-bar row. Pane headers provide window
 drag regions and reserve space for native caption controls; engine status and
 theme switching live at the foot of the sidebar. The Electron shell reuses the
-canonical VoiceStudio artwork and platform icons retained with the archived shell;
+canonical TWIST WHISPER artwork and platform icons retained with the archived shell;
 its packaged uv tool is staged under `electron/build/uv`.
 
 Typography uses locally bundled Inter Variable with system UI fallbacks with shared roles: 14px/20px interface text,
@@ -162,7 +162,7 @@ Theme control row, with a labeled Settings link on the left and Theme on the rig
 
 The workspace footer shows Integrations, Become a Sponsor, and a right-aligned X.
 They open the integration directory, partner inquiry form, and dedicated
-VoiceStudio Pro page respectively. The sponsor hover/focus card shows dated
+Pro page respectively. The sponsor hover/focus card shows dated
 GitHub reach data. The Pro page compares Free and Pro, opens website pricing,
 and leaves licence activation to the separate Pro distribution. Checkout remains
 gated until the paid tools and terms are ready.
@@ -176,7 +176,7 @@ Appearance and General have direct routes and share a breadcrumb header, searcha
 sidebar, max-w-4xl scroll frame, grouped sections, and consistent setting rows.
 Sidebar active/hover surfaces use the shared T3 theme tokens.
 
-The local palette library includes VoiceStudio Original, Canopy, Current, Hearth, and Orchid, with
+The local palette library includes TWIST WHISPER Original, Canopy, Current, Hearth, and Orchid, with
 upstream light/dark color definitions with VoiceStudio display names from T3 Code (MIT). Each appearance keeps
 its own selected palette. System mode follows live OS appearance changes; the
 sidebar toggle explicitly switches to light or dark. Choices persist under

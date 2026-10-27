@@ -86,8 +86,22 @@ export default function AboutTab({
         label={t('about.app')}
         value={
           <span className="inline-flex items-center gap-[var(--space-2)]" translate="no">
-            <VoiceStudioMark className="size-5 text-[var(--chrome-accent)]" />
-            VoiceStudio
+            {/* Screen readers get the full name; the lockup beside it draws it. */}
+            <span className="sr-only">TWIST WHISPER</span>
+            <span
+              aria-hidden="true"
+              className="flex items-center leading-none text-[0.95rem] font-semibold text-[var(--chrome-fg)] tracking-[0.02em]"
+            >
+              TW
+              <VoiceStudioMark className="size-[1.3em] shrink-0 text-[var(--brand-wave)]" />
+              ST
+            </span>
+            <span
+              aria-hidden="true"
+              className="text-[0.68rem] font-semibold leading-none text-[var(--brand-wave)] tracking-[0.3em]"
+            >
+              WHISPER
+            </span>
           </span>
         }
       />

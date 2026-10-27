@@ -20,6 +20,7 @@ import {
 import { useEffect, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AgentFixButton } from '@/components/agent-fix-button';
+import { BootWordmark } from '@/components/boot-wordmark';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import {
@@ -274,7 +275,7 @@ export function BackendGate({ children, repairDock }: BackendGateProps) {
               !
             </div>
           ) : (
-            <Spinner className="size-8 text-primary" aria-label={t('common.loading')} />
+            <BootWordmark label={t('app.name')} />
           )}
           {!setup && !installing && (failed || running) ? (
             <BackendStatusPill state={pillState} seconds={seconds} repeats={repeats} />

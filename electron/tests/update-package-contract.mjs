@@ -1,4 +1,7 @@
 import assert from 'node:assert/strict';
+// The artifact prefix follows PRODUCT_NAME; hardcoding it here made every build
+// after a rebrand fail its own update contract.
+import { artifactProductPrefix } from '../../config/app-config.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
@@ -102,10 +105,9 @@ const hashes = await fileHashes(artifactPath, platform === 'linux');
 assert.equal(hashes.sha512, fileSha, 'Update metadata SHA-512 matches artifact bytes');
 
 const osToken = platform === 'win32' ? 'win' : platform === 'darwin' ? 'mac' : 'linux';
-const artifactBrand =
-  process.env.VOICESTUDIO_DISTRIBUTION === 'microsoft-store'
-    ? 'VoiceStudio-MicrosoftStore'
-    : 'VoiceStudio-Electron';
+const artifactBrand = `${artifactProductPrefix()}-${
+  process.env.VOICESTUDIO_DISTRIBUTION === 'microsoft-store' ? 'MicrosoftStore' : 'Electron'
+}`;
 assert(
   fileUrl.startsWith(`${artifactBrand}-${expectedVersion}-${osToken}-${arch}.`),
   'Update artifact preserves the branded version/platform/architecture name',

@@ -1,7 +1,8 @@
-# VoiceStudio brand
+# TWIST WHISPER brand
 
-VoiceStudio uses a waveform-and-spark mark. The waveform identifies audio; the
-spark identifies creation. The product voice is clear, calm, and direct.
+TWIST WHISPER uses a five-bar waveform mark: warm cream bars on a red rounded
+tile. The waveform identifies audio. The product voice is clear, calm, and
+direct.
 
 ## Assets
 
@@ -10,7 +11,7 @@ spark identifies creation. The product voice is clear, calm, and direct.
 | Primary vector mark | `docs/logo.svg` |
 | README mark | `docs/logo.png` and `docs/logo-256.png` |
 | Browser icon | `electron/public/favicon.svg` |
-| In-app mark | `frontend/src/components/brand/VoiceStudioMark.jsx` |
+| In-app mark | `electron/src/shared/components/brand/VoiceStudioMark.jsx` |
 | Desktop/platform icons | `electron/build/icons/` |
 | Electron sidebar and browser icon | `electron/public/favicon.svg` via `electron/src/renderer/src/lib/brand.ts` |
 | Sidebar/launchpad artwork | `electron/public/signal-field.webp` |
@@ -39,18 +40,15 @@ canonical SVG elsewhere so the silhouette stays recognizable at 16–512 px.
 
 | Role | Color |
 |---|---|
-| Voice rose | `#F47FA3` |
-| Soft highlight | `#FFD0DB` |
-| Creative amber | `#F7AE73` |
-| Spark | `#FFE5B5` |
-| Plum tile | `#211B2B` → `#120F18` |
+| Tile red | `#D93417` |
+| Bar cream | `#F3F1EA` |
 
-The mark may render in one color inside app chrome. Keep the waveform and spark
-together; do not put text inside the icon or add another enclosing ring.
+The mark may render in one color inside app chrome. Keep the five bars together;
+do not put text inside the icon or add another enclosing ring.
 
 ## Name and copy
 
-- Product name: **VoiceStudio**—one word, capital V and S.
+- Product name: **TWIST WHISPER**—two words, uppercase, a single space.
 - Voice: concise, professional, warm, and direct.
 - Promise: local-first creation without a subscription or usage meter.
 - Avoid absolute privacy claims: network-backed engines, downloads, analytics,

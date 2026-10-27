@@ -36,7 +36,7 @@ const VIEW_META = {
   launchpad: {
     labelKey: 'header.label_launchpad',
     Icon: Globe,
-    accent: '#f3a5b6',
+    accent: '#d93417',
     kickerKey: 'header.kicker_studio',
   },
   studio: {
@@ -318,7 +318,10 @@ export default function Header({
             <span className="text-[length:var(--chrome-label-size)] font-semibold tracking-[var(--chrome-label-track)] uppercase text-[var(--chrome-fg-muted)] max-[1501px]:hidden">
               {t(view.kickerKey)}
             </span>
-            <ChevronRight size={10} color="#504945" className="mx-[2px] max-[1501px]:hidden" />
+            <ChevronRight
+                size={10}
+                className="mx-[2px] text-[var(--chrome-fg-dim)] max-[1501px]:hidden"
+              />
             <span
               className="inline-flex items-center gap-1 [font-family:var(--font-sans)] text-[0.72rem] font-semibold tracking-[0.02em] max-[961px]:text-[0.78rem]"
               style={labelStyle}
@@ -328,7 +331,7 @@ export default function Header({
             </span>
             {activeProjectName ? (
               <>
-                <ChevronRight size={10} color="#504945" className="mx-[2px]" />
+                <ChevronRight size={10} className="mx-[2px] text-[var(--chrome-fg-dim)]" />
                 <span
                   className="[font-family:var(--font-sans)] text-[0.68rem] font-medium text-[var(--chrome-fg-muted)] max-w-[180px] overflow-hidden text-ellipsis whitespace-nowrap max-[1201px]:hidden"
                   title={activeProjectName}
@@ -353,18 +356,32 @@ export default function Header({
         </div>
       )}
 
-      {/* Center: logo — the tabs take this room in titlebar-tabs mode. */}
+      {/* Center: wordmark — the tabs take this room in titlebar-tabs mode. */}
       {!tabsInTitlebar && (
         <div
-          className="flex items-center gap-2 justify-self-center pointer-events-none whitespace-nowrap"
+          className="flex flex-col items-center justify-center gap-[2px] justify-self-center pointer-events-none whitespace-nowrap"
           translate="no"
         >
-          <VoiceStudioMark
-            data-testid="voice-studio-logo"
-            className="size-7 overflow-visible text-[var(--chrome-accent)]"
-          />
-          <span className="text-[0.92rem] font-semibold text-[var(--chrome-fg)] tracking-[0.02em] [font-family:var(--font-sans)] not-italic">
-            Voice<span className="text-[var(--chrome-accent)]">Studio</span>
+          {/* Screen readers get the full name; the lockup below draws it. */}
+          <span className="sr-only">TWIST WHISPER</span>
+          <span
+            aria-hidden="true"
+            className="flex items-center leading-none text-[0.92rem] font-semibold text-[var(--chrome-fg)] tracking-[0.02em] [font-family:var(--font-sans)] not-italic"
+          >
+            TW
+            <VoiceStudioMark
+              data-testid="voice-studio-logo"
+              className="size-[1.3em] shrink-0 text-[var(--brand-wave)]"
+            />
+            ST
+          </span>
+          <span
+            aria-hidden="true"
+            className="flex items-center gap-[6px] leading-none text-[0.6rem] font-semibold text-[var(--brand-wave)] tracking-[0.34em] [font-family:var(--font-sans)]"
+          >
+            <span className="h-px w-[14px] bg-current" />
+            <span className="-mr-[0.34em]">WHISPER</span>
+            <span className="h-px w-[14px] bg-current" />
           </span>
         </div>
       )}

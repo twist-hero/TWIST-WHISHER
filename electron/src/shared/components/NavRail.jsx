@@ -23,7 +23,7 @@ function RailBtn({ active, Icon, label, accent, side, onClick, expanded }) {
   // Active = accent-tinted fill/border + an accent indicator bar (`::before`)
   // hanging off the rail edge; flips edges with the rail side.
   const stateCls = active
-    ? `text-[var(--rail-accent,var(--chrome-accent))] bg-[color-mix(in_srgb,var(--rail-accent,var(--chrome-accent))_12%,transparent)] [border:1px_solid_color-mix(in_srgb,var(--rail-accent,var(--chrome-accent))_35%,transparent)] before:absolute before:top-[20%] before:bottom-[20%] before:w-[3px] before:rounded-[2px] before:bg-[var(--rail-accent,#f3a5b6)] before:content-[''] before:[box-shadow:0_0_10px_color-mix(in_srgb,var(--rail-accent,#f3a5b6)_50%,transparent)] ${
+    ? `text-[var(--rail-accent,var(--chrome-accent))] bg-[color-mix(in_srgb,var(--rail-accent,var(--chrome-accent))_12%,transparent)] [border:1px_solid_color-mix(in_srgb,var(--rail-accent,var(--chrome-accent))_35%,transparent)] before:absolute before:top-[20%] before:bottom-[20%] before:w-[3px] before:rounded-[2px] before:bg-[var(--rail-accent,#d93417)] before:content-[''] before:[box-shadow:0_0_10px_color-mix(in_srgb,var(--rail-accent,#d93417)_50%,transparent)] ${
         side === 'right' ? 'before:right-[-8px]' : 'before:left-[-8px]'
       }`
     : 'bg-transparent text-[var(--chrome-fg-dim)] [border:1px_solid_transparent] hover:bg-[var(--chrome-hover-bg)] hover:text-[var(--chrome-fg)]';

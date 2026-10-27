@@ -9,7 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageNativeHelper } from './native-helper-build.mjs';
 import { repairSnapArtifacts } from './snap-template-payload.mjs';
-import { APP_ID, PRODUCT_NAME } from '../config/app-config.mjs';
+import { APP_ID, PRODUCT_NAME, artifactProductPrefix } from '../config/app-config.mjs';
 import { DISTRIBUTION_PROFILE, DISTRIBUTION_TARGET } from '../config/distributions.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -22,7 +22,7 @@ const artifactLabel =
     'microsoft-store': 'MicrosoftStore',
     'mac-app-store': 'MacAppStore',
   }[DISTRIBUTION_TARGET] ?? 'Electron';
-const artifactPrefix = `${PRODUCT_NAME.replace(/[^A-Za-z0-9]+/g, '-')}-${artifactLabel}`;
+const artifactPrefix = `${artifactProductPrefix()}-${artifactLabel}`;
 // Stable and Beta are the Electron update feeds (Beta = `-beta.N` prereleases,
 // stamped by electron-release.yml). Packaging rehearsals from main are stamped
 // stable; they are review artifacts and are never published.

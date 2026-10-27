@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { _resolveApiBase } from './client';
+import { DEFAULT_BACKEND_PORT } from '../app-config.ts';
 
 describe('_resolveApiBase', () => {
   it('served (non-Tauri, non-dev) → SAME ORIGIN (fixes remote LAN-share CORS)', () => {
@@ -11,12 +12,12 @@ describe('_resolveApiBase', () => {
 
   it('Tauri webview → local sidecar (127.0.0.1)', () => {
     const win = { __TAURI__: {}, location: { origin: 'tauri://localhost', hostname: 'localhost' } };
-    expect(_resolveApiBase({}, win)).toBe('http://127.0.0.1:3900');
+    expect(_resolveApiBase({}, win)).toBe(`http://127.0.0.1:${DEFAULT_BACKEND_PORT}`);
   });
 
-  it('vite dev → backend on :3900 (SPA :3901 → API :3900, CORS-allowed)', () => {
+  it(`vite dev → backend on :${DEFAULT_BACKEND_PORT} (SPA :3901 → API, CORS-allowed)`, () => {
     const win = { location: { origin: 'http://localhost:3901', hostname: 'localhost' } };
-    expect(_resolveApiBase({ DEV: true }, win)).toBe('http://localhost:3900');
+    expect(_resolveApiBase({ DEV: true }, win)).toBe(`http://localhost:${DEFAULT_BACKEND_PORT}`);
   });
 
   it('VITE_API_URL overrides everything', () => {
@@ -25,7 +26,7 @@ describe('_resolveApiBase', () => {
   });
 
   it('no window (SSR) → loopback', () => {
-    expect(_resolveApiBase({}, undefined)).toBe('http://127.0.0.1:3900');
+    expect(_resolveApiBase({}, undefined)).toBe(`http://127.0.0.1:${DEFAULT_BACKEND_PORT}`);
   });
 
   it('honors VITE_API_PORT', () => {
@@ -57,6 +58,6 @@ describe('_resolveApiBase', () => {
       __TAURI_INTERNALS__: {},
       location: { origin: 'tauri://localhost', hostname: 'localhost' },
     };
-    expect(_resolveApiBase({}, win)).toBe('http://127.0.0.1:3900');
+    expect(_resolveApiBase({}, win)).toBe(`http://127.0.0.1:${DEFAULT_BACKEND_PORT}`);
   });
 });

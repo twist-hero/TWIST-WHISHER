@@ -33,7 +33,7 @@
 .nav-rail-item[data-expanded="true"] span { font-weight: 450; }
 .nav-rail-item[data-expanded="true"][aria-current="page"] {
   border-color: transparent;
-  background: color-mix(in srgb, var(--rail-accent) 13%, var(--color-bg));
+  background: color-mix(in srgb, var(--rail-accent) 13%, var(--background));
 }
 .nav-rail-item[data-expanded="true"][aria-current="page"] span { font-weight: 600; }
 .nav-rail-item[data-expanded="true"]::before { left: 0; right: auto; width: 2px; box-shadow: none; }

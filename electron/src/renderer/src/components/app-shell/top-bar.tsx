@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { appVersion, isMac } from '../bridge';
 import { ThemeToggle } from './theme-toggle';
+import { UpdateButton } from './update-button';
 
 /**
  * Frameless-window title bar. Windows/Linux draw their own caption buttons via
@@ -30,6 +31,7 @@ export function TopBar() {
         {t('app.tagline')}
       </span>
       <div className="ml-auto flex items-center gap-1">
+        <UpdateButton />
         <ThemeToggle />
       </div>
     </header>

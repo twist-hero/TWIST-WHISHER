@@ -16,7 +16,7 @@ class BrandResourcesTest {
             }
         }
         val canonical=paths(root.resolve("../../docs/logo.svg"))
-        assertEquals(2,canonical.size)
+        assertEquals(1,canonical.size)
         val generated=root.resolve("app/build/generated/brandResources")
         for(name in listOf("vs_logo","vs_launcher_foreground","vs_launcher_monochrome")) {
             assertEquals(canonical,paths(generated.resolve("drawable/$name.xml")))

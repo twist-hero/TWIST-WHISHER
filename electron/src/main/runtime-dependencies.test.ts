@@ -1,6 +1,9 @@
 // @vitest-environment node
 import { afterEach, expect, it, vi } from 'vitest';
 import { execFile } from 'node:child_process';
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import {
   RUNTIME_IMPORT_PROBE,
   RUNTIME_PROBE_TIMEOUT_MS,
@@ -148,4 +151,60 @@ it('describes an interpreter that never started', () => {
   ).toBe('the interpreter could not be started (ENOENT)');
   expect(probeFailureDetail(new Error('first\nsecond'), undefined)).toBe('first');
   expect(probeFailureDetail(null, `E: ${'x'.repeat(500)}`)).toHaveLength(300);
+});
+
+async function runtimeWithInterpreter(): Promise<{ root: string; python: string }> {
+  const root = await mkdtemp(join(tmpdir(), 'vs-probe-cache-'));
+  const python = runtimePython(root);
+  await mkdir(dirname(python), { recursive: true });
+  await writeFile(python, 'interpreter');
+  return { root, python };
+}
+
+it('reuses a definitive pass for the same interpreter instead of importing twice per launch', async () => {
+  const { root, python } = await runtimeWithInterpreter();
+  try {
+    vi.mocked(execFile).mockImplementation(((
+      _command: unknown,
+      _args: unknown,
+      _options: unknown,
+      callback: (error: Error | null, stdout: string, stderr: string) => void,
+    ) => callback(null, '', '')) as never);
+
+    expect(await runtimeDependenciesReady(root)).toBe(true);
+    const afterFirst = vi.mocked(execFile).mock.calls.length;
+    expect(afterFirst).toBeGreaterThan(0);
+
+    expect(await runtimeDependenciesReady(root)).toBe(true);
+    expect(vi.mocked(execFile).mock.calls.length).toBe(afterFirst);
+
+    // A repaired or replaced interpreter must be probed again.
+    await writeFile(python, 'repaired interpreter');
+    expect(await runtimeDependenciesReady(root)).toBe(true);
+    expect(vi.mocked(execFile).mock.calls.length).toBeGreaterThan(afterFirst);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+it('never caches a probe that only ran out of time', async () => {
+  const { root } = await runtimeWithInterpreter();
+  try {
+    vi.mocked(execFile).mockImplementation(((
+      _command: unknown,
+      _args: unknown,
+      _options: unknown,
+      callback: (error: Error | null) => void,
+    ) =>
+      callback(
+        Object.assign(new Error('Command failed'), { killed: true, signal: 'SIGTERM' }),
+      )) as never);
+
+    expect(await runtimeDependenciesReady(root)).toBe(true);
+    const afterFirst = vi.mocked(execFile).mock.calls.length;
+    expect(await runtimeDependenciesReady(root)).toBe(true);
+    expect(vi.mocked(execFile).mock.calls.length).toBe(afterFirst + 1);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
 });

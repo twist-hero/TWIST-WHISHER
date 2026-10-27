@@ -9,6 +9,7 @@ const mocks = vi.hoisted(() => ({
   occupied: new Set<number>(),
   denyAll: false,
   close: vi.fn(),
+  defaultPort: 0,
 }));
 vi.mock('electron', () => ({ app: { isPackaged: true, getPath: () => '/unused-port-test' } }));
 vi.mock('node:child_process', () => ({ spawn: mocks.spawn }));
@@ -19,7 +20,7 @@ vi.mock('node:net', () => ({
         mocks.listen(options);
         const code = mocks.occupied.has(options.port)
           ? 'EADDRINUSE'
-          : options.port === 3900 || mocks.denyAll
+          : options.port === mocks.defaultPort || mocks.denyAll
             ? mocks.bindError
             : null;
         if (code) {
@@ -44,8 +45,13 @@ vi.mock('./runtime-project', () => ({
   stageRuntimeSources: async () => {},
   runtimePython: () => '/runtime/python',
 }));
+import { DEFAULT_BACKEND_PORT } from '../../../config/app-config.mjs';
 import { BackendSupervisor, bindFailureFromLog } from './backend';
 import { availableBackendPort } from './backend-port';
+
+mocks.defaultPort = DEFAULT_BACKEND_PORT;
+const FALLBACK_1 = DEFAULT_BACKEND_PORT + 1000;
+const FALLBACK_2 = DEFAULT_BACKEND_PORT + 2000;
 
 afterEach(() => {
   vi.useRealTimers();
@@ -65,12 +71,12 @@ it.each(['ready', 'timeout', 'shutdown'])(
     vi.stubEnv('OMNIVOICE_BACKEND_CMD', '');
     vi.stubEnv('VOICESTUDIO_SKIP_BACKEND', '');
     vi.stubEnv('OMNIVOICE_STARTUP_BUDGET_S', '10');
-    mocks.occupied.add(4900);
+    mocks.occupied.add(FALLBACK_1);
     let ready = false;
     vi.stubGlobal(
       'fetch',
       vi.fn(async (url: string) => {
-        if (!url.startsWith('http://127.0.0.1:4900/')) throw new Error('unreachable');
+        if (!url.startsWith(`http://127.0.0.1:${FALLBACK_1}/`)) throw new Error('unreachable');
         return new Response(
           JSON.stringify({ status: ready ? 'ok' : 'starting', version: 'test' }),
           {
@@ -115,7 +121,7 @@ it.each([false, true])(
     mocks.spawn.mockImplementation((_command: string, args: string[]) => {
       const port = Number(args.at(-1));
       // Replay the reported bind denial: this port cannot host a healthy backend.
-      runningPort = port === 3900 ? 0 : port;
+      runningPort = port === DEFAULT_BACKEND_PORT ? 0 : port;
       if (runningPort) mocks.occupied.add(runningPort);
       return child;
     });
@@ -132,10 +138,10 @@ it.each([false, true])(
     const supervisor = new BackendSupervisor();
     try {
       await supervisor.start();
-      expect(runningPort).toBe(4900);
+      expect(runningPort).toBe(FALLBACK_1);
       await vi.waitFor(() => expect(supervisor.status.stage).toBe('ready'));
-      expect(supervisor.status.baseUrl).toBe('http://127.0.0.1:4900');
-      expect(mocks.spawn.mock.calls[0][2].env.OMNIVOICE_PORT).toBe('4900');
+      expect(supervisor.status.baseUrl).toBe(`http://127.0.0.1:${FALLBACK_1}`);
+      expect(mocks.spawn.mock.calls[0][2].env.OMNIVOICE_PORT).toBe(String(FALLBACK_1));
       vi.stubEnv('VOICESTUDIO_ALLOW_MULTIPLE_INSTANCES', '1');
       const second = new BackendSupervisor();
       try {
@@ -150,7 +156,7 @@ it.each([false, true])(
       }
       (supervisor as unknown as { child: null }).child = null;
       await supervisor.shutdown();
-      runningPort = existingDefault ? 3900 : 0;
+      runningPort = existingDefault ? DEFAULT_BACKEND_PORT : 0;
       mocks.occupied.clear();
       mocks.bindError = null;
       mocks.listen.mockClear();
@@ -159,15 +165,15 @@ it.each([false, true])(
         return child;
       });
       await supervisor.start();
-      expect(runningPort).toBe(3900);
+      expect(runningPort).toBe(DEFAULT_BACKEND_PORT);
       await vi.waitFor(() => expect(supervisor.status.stage).toBe('ready'));
-      expect(supervisor.baseUrl).toBe('http://127.0.0.1:3900');
+      expect(supervisor.baseUrl).toBe(`http://127.0.0.1:${DEFAULT_BACKEND_PORT}`);
       expect(mocks.spawn).toHaveBeenCalledTimes(existingDefault ? 1 : 2);
       if (existingDefault) expect(mocks.listen).not.toHaveBeenCalled();
       else
         expect(mocks.listen).toHaveBeenCalledExactlyOnceWith({
           host: '127.0.0.1',
-          port: 3900,
+          port: DEFAULT_BACKEND_PORT,
           exclusive: true,
         });
     } finally {
@@ -182,7 +188,7 @@ it.each([200, 404])('skips unrelated occupied fallback listeners (HTTP %s)', asy
   vi.stubEnv('OMNIVOICE_PORT', '');
   vi.stubEnv('OMNIVOICE_BACKEND_CMD', '');
   vi.stubEnv('VOICESTUDIO_SKIP_BACKEND', '');
-  mocks.occupied.add(4900);
+  mocks.occupied.add(FALLBACK_1);
   let runningPort = 0;
   mocks.spawn.mockImplementation((_command: string, args: string[]) => {
     runningPort = Number(args.at(-1));
@@ -196,7 +202,7 @@ it.each([200, 404])('skips unrelated occupied fallback listeners (HTTP %s)', asy
   vi.stubGlobal(
     'fetch',
     vi.fn(async (url: string) => {
-      if (url.startsWith('http://127.0.0.1:4900/'))
+      if (url.startsWith(`http://127.0.0.1:${FALLBACK_1}/`))
         return new Response(JSON.stringify({ status: 'ok', version: 'test' }), { status });
       if (runningPort && url.startsWith(`http://127.0.0.1:${runningPort}/`))
         return new Response(JSON.stringify({ status: 'ok', version: 'test' }), {
@@ -208,9 +214,9 @@ it.each([200, 404])('skips unrelated occupied fallback listeners (HTTP %s)', asy
   const supervisor = new BackendSupervisor();
   try {
     await supervisor.start();
-    expect(runningPort).toBe(5900);
+    expect(runningPort).toBe(FALLBACK_2);
     await vi.waitFor(() => expect(supervisor.status.stage).toBe('ready'));
-    expect(supervisor.baseUrl).toBe('http://127.0.0.1:5900');
+    expect(supervisor.baseUrl).toBe(`http://127.0.0.1:${FALLBACK_2}`);
     expect(vi.mocked(fetch).mock.calls.every(([, options]) => options?.redirect === 'error')).toBe(
       true,
     );
@@ -264,10 +270,10 @@ it.each([null, 'EADDRINUSE'])(
   'preserves the preferred port for %s (including replacement attachment)',
   async (error) => {
     mocks.bindError = error;
-    expect(await availableBackendPort(3900)).toBe(3900);
+    expect(await availableBackendPort(DEFAULT_BACKEND_PORT)).toBe(DEFAULT_BACKEND_PORT);
     expect(mocks.listen).toHaveBeenCalledExactlyOnceWith({
       host: '127.0.0.1',
-      port: 3900,
+      port: DEFAULT_BACKEND_PORT,
       exclusive: true,
     });
     expect(mocks.close).toHaveBeenCalledTimes(error ? 0 : 1);
@@ -276,13 +282,13 @@ it.each([null, 'EADDRINUSE'])(
 
 it('does not hide unrelated bind failures', async () => {
   mocks.bindError = 'EMFILE';
-  await expect(availableBackendPort(3900)).rejects.toMatchObject({ code: 'EMFILE' });
+  await expect(availableBackendPort(DEFAULT_BACKEND_PORT)).rejects.toMatchObject({ code: 'EMFILE' });
   expect(mocks.listen).toHaveBeenCalledTimes(1);
 });
 
 it('bounds fallback attempts when all candidates are denied', async () => {
   mocks.denyAll = true;
-  await expect(availableBackendPort(3900)).rejects.toMatchObject({ code: 'EACCES' });
+  await expect(availableBackendPort(DEFAULT_BACKEND_PORT)).rejects.toMatchObject({ code: 'EACCES' });
   expect(mocks.listen).toHaveBeenCalledTimes(17);
   expect(mocks.listen.mock.calls.every(([options]) => options.port !== 0)).toBe(true);
 });
@@ -290,7 +296,7 @@ it('bounds fallback attempts when all candidates are denied', async () => {
 it.each(['explicit port', 'custom command', 'external backend', 'healthy backend'])(
   'never changes the port for an %s',
   async (kind) => {
-    vi.stubEnv('OMNIVOICE_PORT', kind === 'explicit port' ? '3900' : '');
+    vi.stubEnv('OMNIVOICE_PORT', kind === 'explicit port' ? String(DEFAULT_BACKEND_PORT) : '');
     vi.stubEnv('OMNIVOICE_BACKEND_CMD', kind === 'custom command' ? '["custom-python"]' : '');
     vi.stubEnv('VOICESTUDIO_SKIP_BACKEND', kind === 'external backend' ? '1' : '');
     vi.stubGlobal(
@@ -308,7 +314,7 @@ it.each(['explicit port', 'custom command', 'external backend', 'healthy backend
     const supervisor = new BackendSupervisor();
     try {
       await supervisor.start();
-      expect(supervisor.port).toBe(3900);
+      expect(supervisor.port).toBe(DEFAULT_BACKEND_PORT);
       expect(mocks.listen).not.toHaveBeenCalled();
     } finally {
       (supervisor as unknown as { child: null }).child = null;
@@ -317,20 +323,21 @@ it.each(['explicit port', 'custom command', 'external backend', 'healthy backend
   },
 );
 
-it.each(['', '3900'])(
+it.each(['', String(DEFAULT_BACKEND_PORT)])(
   'does not attach to an unmarked health responder on the configured port (OMNIVOICE_PORT=%j)',
   async (portEnv) => {
     vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
     vi.stubEnv('OMNIVOICE_PORT', portEnv);
     vi.stubEnv('OMNIVOICE_BACKEND_CMD', '');
     vi.stubEnv('VOICESTUDIO_SKIP_BACKEND', '');
-    mocks.occupied.add(3900);
+    mocks.occupied.add(DEFAULT_BACKEND_PORT);
     // Another local service owns the port and happens to answer the same
     // liveness shape, without the VoiceStudio marker header.
     vi.stubGlobal(
       'fetch',
       vi.fn(async (url: string) => {
-        if (!url.startsWith('http://127.0.0.1:3900/')) throw new Error('unreachable');
+        if (!url.startsWith(`http://127.0.0.1:${DEFAULT_BACKEND_PORT}/`))
+          throw new Error('unreachable');
         return new Response(JSON.stringify({ status: 'ok', version: '1.0.0' }));
       }),
     );
@@ -346,13 +353,15 @@ it.each(['', '3900'])(
       await supervisor.start();
       expect(supervisor.status.stage).not.toBe('ready');
       expect(mocks.spawn).toHaveBeenCalledOnce();
-      expect(mocks.spawn.mock.calls[0][2].env.OMNIVOICE_PORT).toBe('3900');
+      expect(mocks.spawn.mock.calls[0][2].env.OMNIVOICE_PORT).toBe(String(DEFAULT_BACKEND_PORT));
       // The spawned backend cannot bind and exits; the user gets the
       // actionable port-in-use message rather than a foreign attachment.
       child.emit('exit', 78, null);
       await vi.advanceTimersByTimeAsync(11_000);
       expect(supervisor.status.stage).toBe('port_in_use');
-      expect(supervisor.status.message).toContain('Port 3900 is already in use');
+      expect(supervisor.status.message).toContain(
+        `Port ${DEFAULT_BACKEND_PORT} is already in use`,
+      );
     } finally {
       (supervisor as unknown as { child: null }).child = null;
       await supervisor.shutdown();

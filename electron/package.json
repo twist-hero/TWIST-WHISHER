@@ -1,12 +1,12 @@
 {
-  "name": "voicestudio-electron",
+  "name": "twist-whisper-electron",
   "version": "0.0.0-electron",
   "private": true,
-  "description": "VoiceStudio desktop shell (Electron) - local voice cloning, no cloud.",
+  "description": "TWIST WHISPER desktop shell (Electron) - local voice cloning, no cloud.",
   "homepage": "https://github.com/debpalash/VoiceStudio",
   "license": "AGPL-3.0-only",
   "author": {
-    "name": "VoiceStudio contributors",
+    "name": "TWIST WHISPER contributors",
     "email": "hi@voicestudio.sh"
   },
   "type": "module",

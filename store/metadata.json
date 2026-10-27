@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "identity": {
-    "productName": "VoiceStudio",
-    "applicationId": "com.voicestudio.desktop",
+    "productName": "TWIST WHISPER",
+    "applicationId": "com.twistwhisper.desktop",
     "publisherLegalName": "Yupcha Softwares Private Limited",
     "license": "AGPL-3.0-only",
     "defaultLocale": "en-US"
   },
   "listing": {
-    "title": "VoiceStudio",
+    "title": "TWIST WHISPER",
     "shortDescription": "Local voice cloning, voice design, dubbing and dictation on your computer.",
-    "description": "VoiceStudio is a local-first desktop studio for voice cloning, voice design, video dubbing, transcription and real-time dictation. Audio and projects remain on the user's computer by default, with no account or API key required. Models and the managed runtime are installed only through explicit setup or model-install actions.",
+    "description": "TWIST WHISPER is a local-first desktop studio for voice cloning, voice design, video dubbing, transcription and real-time dictation. Audio and projects remain on the user's computer by default, with no account or API key required. Models and the managed runtime are installed only through explicit setup or model-install actions.",
     "keywords": [
       "voice cloning",
       "text to speech",

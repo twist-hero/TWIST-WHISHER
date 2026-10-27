@@ -11,6 +11,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act, renderHook, waitFor } from '@testing-library/react';
 import { BootstrapSplash, useBootstrapStage } from '../components/BootstrapSplash';
+import { DEFAULT_BACKEND_PORT } from '../app-config.ts';
 
 const invokeMock = vi.fn();
 const revealMock = vi.fn();
@@ -73,7 +74,7 @@ describe('useBootstrapStage — #879 IPC-dead watchdog', () => {
 
     expect(result.current.stage).toBe('ready');
     expect(fetchMock).toHaveBeenCalledWith(
-      'http://127.0.0.1:3900/health',
+      `http://127.0.0.1:${DEFAULT_BACKEND_PORT}/health`,
       expect.objectContaining({ cache: 'no-store' }),
     );
     // The IPC-fallback breadcrumb for diagnostic bundles / auto bug reports.

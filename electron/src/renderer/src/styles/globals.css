@@ -8,6 +8,31 @@
 @source '../../../shared/components/LanguageFlag.jsx';
 @source '../../../shared/components/VoiceSelector.jsx';
 
+/* Self-hosted IBM Plex (SIL OFL): an engineered, pro-instrument voice instead
+ * of the default UI sans. Variable Sans covers 100–700; Mono carries numeric
+ * readouts, statuses, and code. font-display keeps first paint unblocked. */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  src: url('./fonts/IBMPlexSans.ttf') format('truetype-variations');
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('./fonts/IBMPlexMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  src: url('./fonts/IBMPlexMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark, .dark *));
 
 @theme inline {
@@ -58,8 +83,8 @@
 
 @theme {
   --font-sans:
-    'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+    'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
   --text-ui: 0.875rem;
   --text-ui--line-height: 1.25rem;
   --text-label: 0.8125rem;
@@ -668,5 +693,72 @@ html[data-theme-id='heritage'] {
 @media (prefers-reduced-motion: reduce) {
   [data-slot='switch'].app-switch {
     transition: none;
+  }
+}
+
+/* Console typography. Display type tightens so headings read as engraved
+ * plate rather than default web headings; every numeric readout aligns on the
+ * same column so durations and character counts can be scanned, not read. */
+@layer base {
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono,
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Boot meter: the only motion on the backend gate. Bars keep time like a level
+ * display, staggered so the row reads as one gesture rather than seven blinks.
+ * Reduced motion keeps the mark and drops the animation entirely. */
+@keyframes vs-boot-bar {
+  0%,
+  100% {
+    transform: scaleY(0.26);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes vs-boot-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.vs-boot-bar {
+  width: 3px;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: var(--primary);
+  transform-origin: center;
+  animation: vs-boot-bar 1200ms ease-in-out infinite;
+}
+
+.vs-boot-in {
+  animation: vs-boot-in 420ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-boot-bar {
+    animation: none;
+    transform: scaleY(0.5);
+    opacity: 0.7;
+  }
+
+  .vs-boot-in {
+    animation: none;
   }
 }

@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="docs/logo.png" alt="VoiceStudio" width="88" />
-  <h1>VoiceStudio</h1>
+  <img src="docs/logo.png" alt="TWIST WHISPER" width="88" />
+  <h1>TWIST WHISPER</h1>
   <p>
-    <a href="https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/28176" alt="VoiceStudio ranking on Trendshift" width="220" height="48" /></a>
+    <a href="https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/28176" alt="TWIST WHISPER ranking on Trendshift" width="220" height="48" /></a>
   </p>
   <p><strong>Open-source voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.</strong></p>
   <p>
@@ -31,7 +31,7 @@
 | Clone a voice or design your own | Dub videos with timed speech | Local API & MCP for agents |
 | Dictate with a floating widget | Stories, audiobooks & batch jobs | Reusable recipes & watch folders |
 
-Start with **VoiceStudio** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).
+Start with **TWIST WHISPER** (default, powered by k2-fsa/OmniVoice), or choose another engine. [Features & engine catalog](docs/feature-catalog.md).
 
 Local workflows run on your hardware. Remote services are optional; usage analytics requires consent.
 
@@ -51,7 +51,7 @@ Local workflows run on your hardware. Remote services are optional; usage analyt
   <tr><td align="center">Voice design</td><td align="center">Local models</td></tr>
 </table>
 
-<img width="2628" height="1950" alt="VoiceStudio desktop workspace" src="https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659" />
+<img width="2628" height="1950" alt="TWIST WHISPER desktop workspace" src="https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659" />
 
 </details>
 
@@ -107,7 +107,7 @@ Open **Voice cloning**, choose a voice or add a clean reference recording, enter
 Paste into your coding agent (Claude Code, Codex, Cursor, …):
 
 ```text
-Install the VoiceStudio Electron app on this device and verify it works, following
+Install the TWIST WHISPER Electron app on this device and verify it works, following
 https://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md
 ```
 

@@ -1,9 +1,9 @@
 {
-  "productName": "VoiceStudio",
-  "appId": "com.voicestudio.desktop",
+  "productName": "TWIST WHISPER",
+  "appId": "com.twistwhisper.desktop",
   "ports": {
-    "backend": 3900,
-    "web": 3901,
-    "electronDev": 3902
+    "backend": 3910,
+    "web": 3911,
+    "electronDev": 3912
   }
 }

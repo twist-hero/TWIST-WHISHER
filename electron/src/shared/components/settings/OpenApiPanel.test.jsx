@@ -10,7 +10,9 @@ vi.mock('@scalar/api-reference-react', async () => {
 });
 
 // Control the spec fetch + backend base without a live backend.
-const backendBase = vi.hoisted(() => ({ url: 'http://127.0.0.1:3900' }));
+// vi.hoisted runs before imports, so this can't read DEFAULT_BACKEND_PORT;
+// beforeEach replaces it with the config-derived dev backend below.
+const backendBase = vi.hoisted(() => ({ url: 'http://127.0.0.1:3910' }));
 vi.mock('../../api/client', () => ({
   get API() {
     return backendBase.url;
@@ -29,6 +31,11 @@ import OpenApiPanel from './OpenApiPanel';
 import { apiFetch } from '../../api/client';
 import { copyText } from '../../utils/copyText';
 import toast from 'react-hot-toast';
+import { DEFAULT_BACKEND_PORT } from '../../app-config.ts';
+
+/** The config-derived local dev backend the vite proxy forwards to. */
+const DEV_BASE = `http://127.0.0.1:${DEFAULT_BACKEND_PORT}`;
+const DEV_BASE_LOCALHOST = `http://localhost:${DEFAULT_BACKEND_PORT}`;
 
 const MINIMAL_SPEC = {
   openapi: '3.1.0',
@@ -39,7 +46,7 @@ const MINIMAL_SPEC = {
 describe('OpenApiPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    backendBase.url = 'http://127.0.0.1:3900';
+    backendBase.url = DEV_BASE;
     sessionStorage.clear();
     // The same-origin fallback goes through the global fetch. Default it to
     // "nothing there" so the direct-path tests below stay about apiFetch.
@@ -67,18 +74,18 @@ describe('OpenApiPanel', () => {
       expect.objectContaining({ cache: 'no-store' }),
     );
     // The copy / open-raw affordances still name the real backend base.
-    expect(screen.getByText('http://127.0.0.1:3900/openapi.json')).toBeInTheDocument();
+    expect(screen.getByText(`${DEV_BASE}/openapi.json`)).toBeInTheDocument();
   });
 
   it('accepts the default localhost development backend', async () => {
-    backendBase.url = 'http://localhost:3900';
+    backendBase.url = DEV_BASE_LOCALHOST;
     apiFetch.mockRejectedValue(new TypeError('Failed to fetch'));
     fetch.mockResolvedValue({ ok: true, json: async () => MINIMAL_SPEC });
     render(<OpenApiPanel />);
     expect(await screen.findByTestId('scalar-mock')).toBeInTheDocument();
   });
 
-  it.each(['https://my-backend.example', 'http://localhost:3901', 'https://localhost:3900'])(
+  it.each(['https://my-backend.example', `http://localhost:${DEFAULT_BACKEND_PORT + 1}`, 'https://localhost:3900'])(
     'never substitutes the page server for %s',
     async (url) => {
       backendBase.url = url;
@@ -125,7 +132,7 @@ describe('OpenApiPanel', () => {
     expect(screen.getByTestId('openapi-reference')).toBeInTheDocument();
 
     // Copy / open-raw affordances point at the resolved backend base.
-    expect(screen.getByText('http://127.0.0.1:3900/openapi.json')).toBeInTheDocument();
+    expect(screen.getByText(`${DEV_BASE}/openapi.json`)).toBeInTheDocument();
     expect(screen.getByTestId('openapi-copy-url')).toBeInTheDocument();
     expect(screen.getByTestId('openapi-open-raw')).toBeInTheDocument();
   });
@@ -165,7 +172,7 @@ describe('OpenApiPanel', () => {
     fireEvent.click(screen.getByTestId('openapi-copy-url'));
 
     await vi.waitFor(() => expect(toast.success).toHaveBeenCalled());
-    expect(copyText).toHaveBeenCalledWith('http://127.0.0.1:3900/openapi.json');
+    expect(copyText).toHaveBeenCalledWith(`${DEV_BASE}/openapi.json`);
     expect(toast.error).not.toHaveBeenCalled();
   });
 

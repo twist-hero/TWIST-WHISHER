@@ -456,10 +456,38 @@ export function probeFailureDetail(error: unknown, stderr: unknown): string {
   return scrubText(detail).slice(0, 300);
 }
 
-export async function runtimeDependenciesReady(
+/**
+ * A definitive successful probe is cached against the interpreter that passed it.
+ *
+ * The probe imports torch, torchaudio and torchvision — seconds on a warm cache
+ * and far longer on a cold or antivirus-scanned one — and the backend imports
+ * the same modules again when it starts. Repeating it on every launch doubles
+ * startup for no new information, because the interpreter and the probe source
+ * are its entire input. Repairs, reinstalls and interpreter swaps change that
+ * identity and invalidate the stamp; a cached pass never hides a later failure
+ * of the backend itself, which still reports through the normal gate.
+ */
+const DEPENDENCY_PROBE_STAMP = join('.venv', '.vs-dependency-probe.json');
+
+/** Identity of everything the probe result depends on, or null when it cannot be trusted. */
+async function dependencyProbeKey(project: string): Promise<string | null> {
+  try {
+    const python = runtimePython(project);
+    const info = await stat(python);
+    return createHash('sha256')
+      .update(`${python}\u0000${info.size}\u0000${Math.trunc(info.mtimeMs)}`)
+      .update('\u0000')
+      .update(RUNTIME_IMPORT_PROBE)
+      .digest('hex');
+  } catch {
+    return null;
+  }
+}
+
+function runDependencyProbe(
   project: string,
   onFailure?: (detail: string) => void,
-): Promise<boolean> {
+): Promise<{ ready: boolean; definitive: boolean }> {
   const env: NodeJS.ProcessEnv = { ...process.env };
   delete env.PYTHONHOME;
   delete env.PYTHONPATH;
@@ -478,16 +506,47 @@ export async function runtimeDependenciesReady(
         env,
       },
       (error, stdout, stderr) => {
-        const ready = !error || probeTimedOut(error);
+        // A timed-out probe proves nothing, so it counts as ready but is never cached.
+        const timedOut = Boolean(error) && probeTimedOut(error);
+        const ready = !error || timedOut;
         if (!ready) {
           const module = lastImportAttempted(stdout);
           const detail = probeFailureDetail(error, stderr);
-          onFailure?.(module && !String(stderr ?? '').trim() ? `${detail} (importing ${module})` : detail);
+          onFailure?.(
+            module && !String(stderr ?? '').trim() ? `${detail} (importing ${module})` : detail,
+          );
         }
-        resolve(ready);
+        resolve({ ready, definitive: !timedOut });
       },
     );
   });
+}
+
+export async function runtimeDependenciesReady(
+  project: string,
+  onFailure?: (detail: string) => void,
+): Promise<boolean> {
+  const key = await dependencyProbeKey(project);
+  if (key) {
+    try {
+      const stamp = JSON.parse(
+        await readFile(join(project, DEPENDENCY_PROBE_STAMP), 'utf8'),
+      ) as { key?: string };
+      if (stamp.key === key) return true;
+    } catch {
+      /* No usable stamp: run the probe as before. */
+    }
+  }
+  const { ready, definitive } = await runDependencyProbe(project, onFailure);
+  if (ready && definitive && key) {
+    try {
+      await mkdir(join(project, '.venv'), { recursive: true });
+      await writeFile(join(project, DEPENDENCY_PROBE_STAMP), JSON.stringify({ key }));
+    } catch {
+      /* A launch that probes again is slower, not broken. */
+    }
+  }
+  return ready;
 }
 
 /**

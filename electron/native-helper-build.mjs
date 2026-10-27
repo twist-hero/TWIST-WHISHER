@@ -21,6 +21,17 @@ export function nativeTarget(platform, arch) {
 /** Build for the actual installer architecture, then copy before signing. */
 export async function packageNativeHelper(context) {
   const platform = context.electronPlatformName;
+  // Packaging on a host without Rust/MSVC must not silently drop working code:
+  // the switch is explicit, it says what is missing, and the resulting build has
+  // no helper, so watch folders, native capture and uninstall cleanup degrade.
+  if (process.env.VOICESTUDIO_SKIP_NATIVE_HELPER === '1') {
+    console.warn(
+      '[native-helper] VOICESTUDIO_SKIP_NATIVE_HELPER=1 — packaging WITHOUT native/voicestudio-desktop-bridge. ' +
+        'Watch folders, native capture and uninstall cleanup will be unavailable in this build. ' +
+        'Install Rust and the MSVC build tools, then rebuild for a complete installer.',
+    );
+    return;
+  }
   const target = nativeTarget(platform, Arch[context.arch]);
   const targetDir = join(root, 'target');
   await new Promise((resolve, reject) => {

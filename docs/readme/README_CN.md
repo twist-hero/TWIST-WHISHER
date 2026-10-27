@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="../../docs/logo.png" alt="VoiceStudio" width="88" />
-  <h1>VoiceStudio</h1>
+  <img src="../../docs/logo.png" alt="TWIST WHISPER" width="88" />
+  <h1>TWIST WHISPER</h1>
   <p>
-    <a href="https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/28176" alt="VoiceStudio 在 Trendshift 上的排名" width="220" height="48" /></a>
+    <a href="https://trendshift.io/repositories/28176?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-28176" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/28176" alt="TWIST WHISPER 在 Trendshift 上的排名" width="220" height="48" /></a>
   </p>
   <p><strong>开源的声音克隆、声音设计、视频配音、语音听写、转录与有声书创作，支持 646 种语言。</strong></p>
   <p>
@@ -31,7 +31,7 @@
 | 克隆一个声音，或设计属于你的声音 | 为视频配上时间轴对齐的配音 | 面向智能体的本地 API 与 MCP |
 | 用悬浮组件随时听写 | 故事、有声书与批量任务 | 可选的远程 worker |
 
-从 **VoiceStudio** 开始（默认引擎，基于 k2-fsa/OmniVoice），也可以选择其他引擎。详见[功能与引擎目录](../../docs/feature-catalog.md)。
+从 **TWIST WHISPER** 开始（默认引擎，基于 k2-fsa/OmniVoice），也可以选择其他引擎。详见[功能与引擎目录](../../docs/feature-catalog.md)。
 
 本地工作流在你的硬件上运行。远程服务为可选功能；使用情况分析须经同意才会启用。
 
@@ -51,7 +51,7 @@
   <tr><td align="center">声音设计</td><td align="center">本地模型</td></tr>
 </table>
 
-<img width="2628" height="1950" alt="VoiceStudio 桌面工作区" src="https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659" />
+<img width="2628" height="1950" alt="TWIST WHISPER 桌面工作区" src="https://github.com/user-attachments/assets/b474497d-a453-49a3-a2dd-f023ec6b7659" />
 
 </details>
 
@@ -89,7 +89,7 @@ curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall
 粘贴到你的编码智能体（Claude Code、Codex、Cursor 等）：
 
 ```text
-Install the VoiceStudio Electron app on this device and verify it works, following
+Install the TWIST WHISPER Electron app on this device and verify it works, following
 https://github.com/debpalash/VoiceStudio/blob/main/docs/install/agent.md
 ```
 

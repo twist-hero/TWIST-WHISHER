@@ -1,6 +1,9 @@
 // @vitest-environment node
 import { EventEmitter } from 'node:events';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { DEFAULT_BACKEND_PORT } from '../../../config/app-config.mjs';
+
+const FALLBACK_1 = DEFAULT_BACKEND_PORT + 1000;
 
 /**
  * #2445 — "Backend did not answer on port 3900 within 300 s".
@@ -185,7 +188,9 @@ it('still fails the backend once it has had its full budget', async () => {
     expect(supervisor.status.stage).toBe('starting');
     await vi.advanceTimersByTimeAsync(2_000);
     expect(supervisor.status.stage).toBe('failed');
-    expect(supervisor.status.message).toContain('did not answer on port 3900');
+    expect(supervisor.status.message).toContain(
+      `did not answer on port ${DEFAULT_BACKEND_PORT}`,
+    );
   } finally {
     (supervisor as unknown as { child: null }).child = null;
     await supervisor.shutdown();
@@ -264,16 +269,18 @@ it('blames no backend for an attach-only wait that times out', async () => {
     await vi.advanceTimersByTimeAsync(11_000);
     expect(supervisor.status.stage).toBe('failed');
 
-    // Deny the default port so port selection falls through to 4900, which
-    // answers the identity probe but never the health one. That is the
-    // attach-only wait: a finite budget, and no process of ours to quote.
-    mocks.denied.add(3900);
-    mocks.occupied.add(4900);
+    // Deny the default port so port selection falls through to the first
+    // fallback, which answers the identity probe but never the health one.
+    // That is the attach-only wait: a finite budget, and no process of ours
+    // to quote.
+    mocks.denied.add(DEFAULT_BACKEND_PORT);
+    mocks.occupied.add(FALLBACK_1);
     let identified = 0;
     vi.stubGlobal(
       'fetch',
       vi.fn(async (url: string) => {
-        if (!url.includes(':4900') || ++identified > 1) throw new Error('never ready');
+        if (!url.includes(`:${FALLBACK_1}`) || ++identified > 1)
+          throw new Error('never ready');
         return new Response(JSON.stringify({ status: 'starting' }), {
           status: 503,
           headers: { 'x-omnivoice-backend': 'test' },
@@ -282,7 +289,7 @@ it('blames no backend for an attach-only wait that times out', async () => {
     );
     await supervisor.restart();
     expect(mocks.spawn).toHaveBeenCalledTimes(1);
-    expect(supervisor.port).toBe(4900);
+    expect(supervisor.port).toBe(FALLBACK_1);
     await vi.advanceTimersByTimeAsync(11_000);
     expect(supervisor.status.stage).toBe('failed');
     expect(supervisor.status.message).toContain('Nothing was spawned for this attempt.');

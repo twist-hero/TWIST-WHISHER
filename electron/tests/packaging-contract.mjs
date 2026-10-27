@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
 import { verifyLinuxLibraries } from '../native-linux-libraries.mjs';
-import { APP_ID, PRODUCT_NAME } from '../../config/app-config.mjs';
+import { APP_ID, PRODUCT_NAME, artifactProductPrefix } from '../../config/app-config.mjs';
 import { DISTRIBUTION_PROFILE, DISTRIBUTION_TARGET } from '../../config/distributions.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 if (process.platform === 'linux') {
@@ -74,9 +74,12 @@ const electronPackage = JSON.parse(readFileSync(resolve(root, 'package.json'), '
 assert.match(electronPackage.author?.email ?? '', /@/, 'Linux package declares a maintainer email');
 assert.equal(config.productName, PRODUCT_NAME, 'Builder uses the central product name');
 assert.equal(config.appId, APP_ID, 'Builder uses the central application ID');
+// Direct-download artifacts keep the plain hyphenated product prefix; store
+// builds insert their store segment. Filenames stay shell/URL-safe even when
+// the product name carries spaces.
 assert.equal(
   config.artifactName,
-  `${PRODUCT_NAME}-${
+  `${artifactProductPrefix()}-${
     {
       'microsoft-store': 'MicrosoftStore',
       'mac-app-store': 'MacAppStore',

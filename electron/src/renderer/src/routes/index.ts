@@ -264,7 +264,13 @@ export const diagnosticsRoute = createRoute({
   path: '/settings/diagnostics',
   component: SettingsPage,
 });
+export const liveRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/live',
+  component: lazyRouteComponent(() => import('@/features/live/live-voice-page'), 'LiveVoicePage'),
+});
 export const routeTree = rootRoute.addChildren([
+  liveRoute,
   diagnosticsRoute,
   openApiRoute,
   updatesRoute,

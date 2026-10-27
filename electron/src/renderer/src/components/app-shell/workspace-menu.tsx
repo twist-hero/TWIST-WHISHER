@@ -35,6 +35,7 @@ type Destination = readonly [
     | '/dub'
     | '/design'
     | '/transcriptions'
+    | '/live'
     | '/personas'
     | '/calls'
     | '/integrations',
@@ -61,6 +62,7 @@ const dubDestinations: Destination[] = [
 ];
 const laterDestinations: Destination[] = [
   ['/transcriptions', 'nav.transcribe', MicIcon],
+  ['/live', 'nav.liveVoice', AudioLinesIcon],
   ['/calls', 'workflows.title', WorkflowIcon],
   ['/projects', 'projects.title', FolderIcon],
   ['/tools', 'tools.title', WrenchIcon],
@@ -82,6 +84,7 @@ const iconMotion: Record<Destination[0], string> = {
   '/dub': 'tilt',
   '/batch': 'lift',
   '/transcriptions': 'nudge',
+  '/live': 'wave',
   '/calls': 'pulse',
   '/projects': 'lift',
   '/tools': 'tilt',
